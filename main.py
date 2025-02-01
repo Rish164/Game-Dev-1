@@ -15,6 +15,8 @@ pygame.display.set_icon(pygame.image.load('Game-Dev-1/images/gameicon.png'))
 playerImg = pygame.image.load('Game-Dev-1/images/spaceship.png')
 playerX = W/2 - 32
 playerY = 4*H/5
+pX_change = 0
+pY_change = 0
 
 def player(x, y):
     screen.blit(playerImg, (x, y))
@@ -48,8 +50,40 @@ while running:
             #sys.exit(): Removing this now, because this instantly kills the program
             #and we want to close the window first and then kill the program
             
+        #Player Movement.................................................    
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            pX_change = -0.5
+        elif keys[pygame.K_RIGHT]:
+            pX_change = 0.5
+        elif keys[pygame.K_UP]:
+            pY_change = -0.5
+        elif keys[pygame.K_DOWN]:
+            pY_change = 0.5
+        else:
+            pX_change = 0
+            pY_change = 0
+        #..................................................................    
+
+    #player boundaries
+    if playerX <= 0:
+        playerX = 0
+    elif playerX >= W - 64:
+        playerX = W - 64
+
+    if playerY <= (2*H/3)-100:
+        playerY = (2*H/3)-100
+    elif playerY >= H - 64:
+        playerY = H - 64
+    #.....................................................................
+
+    #changes/updates/frames
     draw_belt()        
+
+    playerX += pX_change
+    playerY += pY_change
     player(playerX, playerY)
+
     pygame.display.update()
 
 # Quit the game: Outside the event loop
