@@ -34,7 +34,7 @@ pygame.display.set_icon(pygame.image.load('images/gameicon.png'))
 playerImg = pygame.image.load('images/spaceship.png')
 playerX = W/2 - 32
 playerY = 4*H/5
-p_vector = 0.8
+p_vector = 1
 #
 def player(x, y):
     screen.blit(playerImg, (x, y))
@@ -77,12 +77,19 @@ class Enemy:
         self.y = y
         self.x_vector = x_vector
         self.y_vector = y_vector
+        self.crossed = False
     #
     def move(self):
         self.x += self.x_vector
         self.y += self.y_vector
         if self.x<=0 or self.x>=W-64:
             self.x_vector = -self.x_vector #Reversing Horizontal direction for boundaries
+    #
+        if self.y>=beltY and not self.crossed:
+            global score
+            score -= 1
+            self.crossed = True
+            print(score)
     #    
     def draw_enemy(self):
         screen.blit(self.image, (self.x, self.y))
@@ -93,15 +100,15 @@ def spawn_enemy():
     image = random.choice(enemy_img)
     x = random.choice([0, W-64])
     y = random.choice([-50, 50])
-    x_vector = random.choice([-0.4, 0.4])
-    y_vector = random.choice([0.1, 0.3])
+    x_vector = random.choice([-0.6, 0.6])
+    y_vector = random.choice([0.1, 0.5])
 
     enemy = Enemy(image, x, y, x_vector, y_vector)
     enemies.append(enemy)
 #
 #Spawn Time
 last_spawn_time = pygame.time.get_ticks()
-spawn_interval = 1500
+spawn_interval = 650
 #........................................................................
 
 
@@ -114,7 +121,7 @@ def isCollisionbullet():
 
 
 #collision/enemy/asteroidbelt
-
+#within enemy.move()
 #........................................................................
 
 
