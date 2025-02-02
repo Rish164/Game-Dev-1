@@ -5,10 +5,10 @@ import random
 
 #Enemy Data
 enemy_img = [
-    pygame.image.load('Game-Dev-1/enemy images/enemy.png'),
-    pygame.image.load('Game-Dev-1/enemy images/ghost.png'),
-    pygame.image.load('Game-Dev-1/enemy images/ghostx.png'),
-    pygame.image.load('Game-Dev-1/enemy images/ufo.png')
+    pygame.image.load('enemy images/enemy.png'),
+    pygame.image.load('enemy images/ghost.png'),
+    pygame.image.load('enemy images/ghostx.png'),
+    pygame.image.load('enemy images/ufo.png')
 ]
 
 
@@ -21,12 +21,12 @@ W = 800
 H = 600
 screen = pygame.display.set_mode((W, H))
 pygame.display.set_caption("Space Invaders: The Game")
-pygame.display.set_icon(pygame.image.load('Game-Dev-1/images/gameicon.png'))
+pygame.display.set_icon(pygame.image.load('images/gameicon.png'))
 #........................................................................
 
 
 #Player
-playerImg = pygame.image.load('Game-Dev-1/images/spaceship.png')
+playerImg = pygame.image.load('images/spaceship.png')
 playerX = W/2 - 32
 playerY = 4*H/5
 p_vector = 0.8
@@ -37,7 +37,7 @@ def player(x, y):
 
 
 #End_line/Asteroid Belt
-rockImg = pygame.image.load('Game-Dev-1/images/stone.png')
+rockImg = pygame.image.load('images/stone.png')
 rWidth, rHeight = 24, 24
 beltY = playerY + 32
 #
@@ -53,7 +53,7 @@ def draw_belt():
 
 
 #Bullet
-bulletImg = pygame.image.load('Game-Dev-1/images/bullet.png')
+bulletImg = pygame.image.load('images/bullet.png')
 b_speed = 3.5
 b_x = 0
 b_y = playerY
