@@ -15,16 +15,14 @@ pygame.display.set_icon(pygame.image.load('Game-Dev-1/images/gameicon.png'))
 playerImg = pygame.image.load('Game-Dev-1/images/spaceship.png')
 playerX = W/2 - 32
 playerY = 4*H/5
-pX_change = 0
-pY_change = 0
+p_vector = 2
 
 def player(x, y):
     screen.blit(playerImg, (x, y))
 
 #End_line/Asteroid Belt
 rockImg = pygame.image.load('Game-Dev-1/images/stone.png')
-rWidth = 24
-rHeight = 24
+rWidth, rHeight = 24, 24
 beltY = playerY + 32
 #..........................................................................
 num_of_rocks = W//rWidth
@@ -39,31 +37,23 @@ def draw_belt():
 
 #Now we will start the Event/Game loop
 running = True
-#EventLoop
+#Main/GameLoop
 while running:
 
     screen.fill((0, 0, 0))
 
+    #Eventloop
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
             #sys.exit(): Removing this now, because this instantly kills the program
             #and we want to close the window first and then kill the program
             
-        #Player Movement.................................................    
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
-            pX_change = -0.5
-        elif keys[pygame.K_RIGHT]:
-            pX_change = 0.5
-        elif keys[pygame.K_UP]:
-            pY_change = -0.5
-        elif keys[pygame.K_DOWN]:
-            pY_change = 0.5
-        else:
-            pX_change = 0
-            pY_change = 0
-        #..................................................................    
+    #Player Movement   
+    keys = pygame.key.get_pressed()
+    playerX += (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * p_vector
+    playerY += (keys[pygame.K_DOWN] - keys[pygame.K_UP]) * p_vector
+    #.....................................................................    
 
     #player boundaries
     if playerX <= 0:
@@ -80,8 +70,6 @@ while running:
     #changes/updates/frames
     draw_belt()        
 
-    playerX += pX_change
-    playerY += pY_change
     player(playerX, playerY)
 
     pygame.display.update()
