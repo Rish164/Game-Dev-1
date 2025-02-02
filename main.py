@@ -2,6 +2,9 @@ import pygame
 import math
 import random
 
+def distance(x1, y1, x2, y2):
+    return math.sqrt((x2-x1)**2 + (y2-y1)**2)
+
 pygame.init()
 #......................................................................
 
@@ -68,19 +71,24 @@ enemies = []
 def spawn_enemy():
     img = random.choice(enemy_images)
 
-    x = random.randint(0, W - 64)
+    x = random.randint(0, W)
     y = random.randint(-50, 100)
 
-    eX_change = random.choice([-0.5, 0.5])
-    eY_change = random.choice([0.5, 1.0])
+    eX_change = random.choice([-0.2, 0.2])
+    eY_change = random.choice([0.1, 0.2])
 
     enemy = Enemy(img, x, y, eX_change, eY_change)
     enemies.append(enemy)
 
 #Timer for spawning enemies
 spawn_timer = 0
-spawn_interval = 1000
+spawn_interval = 1500
 #..........................................................................
+
+
+#Score
+score = 0
+
 
 #Now we will start the Event/Game loop
 running = True
