@@ -2,6 +2,7 @@ import pygame
 import math
 import random
 
+
 #Enemy Data
 enemy_img = [
     pygame.image.load('Game-Dev-1/enemy images/enemy.png'),
@@ -10,7 +11,10 @@ enemy_img = [
     pygame.image.load('Game-Dev-1/enemy images/ufo.png')
 ]
 
+
 pygame.init()
+#......................................................................
+
 
 #Screen
 W = 800
@@ -152,8 +156,8 @@ while running:
     elif playerY >= H - 64:
         playerY = H - 64
     #.....................................................................
-
-
+    
+    
     #bullet mechanics
     if b_y <= 0:  # Reset bullet when it goes off-screen
         state = "ready"
