@@ -3,6 +3,10 @@ import math
 import random
 
 
+#Distance formula
+def distance(x1, x2, y1, y2):
+    return math.sqrt((x2-x1)**2+(y2-y1)**2)
+
 #Enemy Data
 enemy_img = [
     pygame.image.load('enemy images/enemy.png'),
@@ -11,6 +15,7 @@ enemy_img = [
     pygame.image.load('enemy images/ufo.png')
 ]
 
+score = 0
 
 pygame.init()
 #......................................................................
@@ -39,7 +44,7 @@ def player(x, y):
 #End_line/Asteroid Belt
 rockImg = pygame.image.load('images/stone.png')
 rWidth, rHeight = 24, 24
-beltY = playerY + 32
+beltY = 4*H/5 + 32
 #
 num_of_rocks = W//rWidth
 remaining_space = W - (num_of_rocks*rWidth)
@@ -55,8 +60,8 @@ def draw_belt():
 #Bullet
 bulletImg = pygame.image.load('images/bullet.png')
 b_speed = 3.5
-b_x = 0
-b_y = playerY
+b_x = -500
+b_y = -500
 state = "ready"
 #
 def fire(x, y):
@@ -76,7 +81,7 @@ class Enemy:
     def move(self):
         self.x += self.x_vector
         self.y += self.y_vector
-        if self.x<=0 or self.x>=W:
+        if self.x<=0 or self.x>=W-64:
             self.x_vector = -self.x_vector #Reversing Horizontal direction for boundaries
     #    
     def draw_enemy(self):
@@ -86,7 +91,7 @@ enemies = []
 
 def spawn_enemy():
     image = random.choice(enemy_img)
-    x = random.choice([0, W])
+    x = random.choice([0, W-64])
     y = random.choice([-50, 50])
     x_vector = random.choice([-0.4, 0.4])
     y_vector = random.choice([0.1, 0.3])
@@ -97,6 +102,19 @@ def spawn_enemy():
 #Spawn Time
 last_spawn_time = pygame.time.get_ticks()
 spawn_interval = 1500
+#........................................................................
+
+
+#collision/bullet/enemy
+def isCollisionbullet():
+    if distance(b_x, enemy.x, b_y, enemy.y) < 32:
+        return True
+    return False
+#........................................................................
+
+
+#collision/enemy/asteroidbelt
+
 #........................................................................
 
 
@@ -125,6 +143,8 @@ while running:
     
     #Asteroid belt
     draw_belt() 
+    #
+    
     #....................................................................
 
 
@@ -161,10 +181,19 @@ while running:
     #bullet mechanics
     if b_y <= 0:  # Reset bullet when it goes off-screen
         state = "ready"
-        b_y = playerY
+        b_y = -500
     if state == "fire":  # Fix: Use == instead of is (my comment)
         fire(b_x, b_y)
         b_y -= b_speed
+    #Kill
+    for enemy in enemies:
+        if isCollisionbullet():
+            state = "ready"
+            b_y = playerY
+            score += 1
+            print(score)
+            enemy.x = random.choice([0, W])
+            enemy.y = random.choice([-50, 100])
     #.....................................................................
 
 
