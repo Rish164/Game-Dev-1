@@ -2,6 +2,14 @@ import pygame
 import math
 import random
 
+#Enemy Data
+enemy_img = [
+    pygame.image.load('Game-Dev-1/enemy images/enemy.png'),
+    pygame.image.load('Game-Dev-1/enemy images/ghost.png'),
+    pygame.image.load('Game-Dev-1/enemy images/ghostx.png'),
+    pygame.image.load('Game-Dev-1/enemy images/ufo.png')
+]
+
 pygame.init()
 
 #Screen
@@ -42,13 +50,49 @@ def draw_belt():
 
 #Bullet
 bulletImg = pygame.image.load('Game-Dev-1/images/bullet.png')
-b_speed = 3
+b_speed = 3.5
 b_x = 0
 b_y = playerY
 state = "ready"
 #
 def fire(x, y):
     screen.blit(bulletImg, (x+16, y))
+#........................................................................
+
+
+#Enemy
+class Enemy:
+    def __init__(self, image, x, y, x_vector, y_vector):
+        self.image = image
+        self.x = x
+        self.y = y
+        self.x_vector = x_vector
+        self.y_vector = y_vector
+    #
+    def move(self):
+        self.x += self.x_vector
+        self.y += self.y_vector
+        if self.x<=0 or self.x>=W:
+            self.x_vector = -self.x_vector #Reversing Horizontal direction for boundaries
+    #    
+    def draw_enemy(self):
+        screen.blit(self.image, (self.x, self.y))
+
+enemies = []
+
+def spawn_enemy():
+    image = random.choice(enemy_img)
+    x = random.choice([0, W])
+    y = random.choice([-50, 50])
+    x_vector = random.choice([-0.4, 0.4])
+    y_vector = random.choice([0.1, 0.3])
+
+    enemy = Enemy(image, x, y, x_vector, y_vector)
+    enemies.append(enemy)
+#
+#Spawn Time
+last_spawn_time = pygame.time.get_ticks()
+spawn_interval = 1500
 #........................................................................
 
 
@@ -73,18 +117,35 @@ while running:
                 b_x = playerX
                 b_y = playerY       
     #....................................................................
+    
+    
+    #Asteroid belt
+    draw_belt() 
+    #....................................................................
 
 
-    #Player Movement   
+    #Enemy Spawn and movement
+    current_time = pygame.time.get_ticks()
+    if current_time - last_spawn_time >= spawn_interval:
+        spawn_enemy()
+        last_spawn_time = current_time
+    #
+    for enemy in enemies:
+        enemy.move()
+        enemy.draw_enemy()
+    #....................................................................
+
+
+    #Player Movement/boundaries   
     keys = pygame.key.get_pressed()
     playerX += (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * p_vector
     playerY += (keys[pygame.K_DOWN] - keys[pygame.K_UP]) * p_vector
     #    
-    #player boundaries
-    if playerX <= 0:
-        playerX = 0
-    elif playerX >= W - 64:
-        playerX = W - 64
+    #boundaries
+    if playerX <= -24:
+        playerX = -24
+    elif playerX >= W - 40:
+        playerX = W - 40
     #
     if playerY <= (2*H/3)-100:
         playerY = (2*H/3)-100
@@ -103,8 +164,7 @@ while running:
     #.....................................................................
 
 
-    #changes/updates/frames
-    draw_belt()        
+    #changes/updates/frames       
     player(playerX, playerY)
     pygame.display.update()
 
