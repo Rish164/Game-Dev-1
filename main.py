@@ -131,6 +131,7 @@ while running:
     #.....................................................................
 
     #changes/updates/frames
+    draw_belt()
 
     #Enemy Spawning with Timer
     if pygame.time.get_ticks() - spawn_timer > spawn_interval:
@@ -146,10 +147,6 @@ while running:
             enemy.eX_change = random.choice([0.5, 1.0])
         elif enemy.x >= W - 64:
             enemy.eX_change = random.choice([-0.5, -1.0])
-
-
-
-    draw_belt()
 
     playerX += pX_change
     playerY += pY_change
