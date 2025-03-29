@@ -102,7 +102,7 @@ class Enemy:
             global score
             score -= 1
             self.crossed = True
-            print(score)
+            #print(score)
     #    
     def draw_enemy(self):
         screen.blit(self.image, (self.x, self.y))
@@ -211,7 +211,7 @@ while running:
             state = "ready"
             b_y = -500
             score += 1
-            print(score)
+            #print(score)
             enemy.x = random.choice([0, W])
             enemy.y = random.choice([-50, 100])
     #.....................................................................
