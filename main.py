@@ -21,6 +21,19 @@ pygame.init()
 #......................................................................
 
 
+#Score display()
+pygame.font.init()
+font = pygame.font.Font(None, 36)
+
+def draw_score():
+    score_text = font.render(f"Score: {score}", True, (255, 255, 255))
+    screen.blit(score_text, (10, 10)) #position: top-left
+#.......................................................................
+
+
+
+
+
 #Screen
 W = 800
 H = 600
@@ -114,7 +127,7 @@ spawn_interval = 650
 
 #collision/bullet/enemy
 def isCollisionbullet():
-    if distance(b_x, enemy.x, b_y, enemy.y) < 32:
+    if state == "fire" and distance(b_x, enemy.x, b_y, enemy.y) < 32:
         return True
     return False
 #........................................................................
@@ -196,7 +209,7 @@ while running:
     for enemy in enemies:
         if isCollisionbullet():
             state = "ready"
-            b_y = playerY
+            b_y = -500
             score += 1
             print(score)
             enemy.x = random.choice([0, W])
@@ -206,6 +219,7 @@ while running:
 
     #changes/updates/frames       
     player(playerX, playerY)
+    draw_score()
     pygame.display.update()
 
 # Quit the game: Outside the event loop
