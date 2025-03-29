@@ -189,7 +189,7 @@ while running:
     if b_y <= 0:  # Reset bullet when it goes off-screen
         state = "ready"
         b_y = -500
-    if state == "fire":  # Fix: Use == instead of is (my comment)
+    if state == "fire":  # Fix: Use == instead of is keyword 
         fire(b_x, b_y)
         b_y -= b_speed
     #Kill
