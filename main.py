@@ -125,6 +125,10 @@ spawn_interval = 1000
 # collision/bullet/enemy
 def isCollisionbullet(enemy):
     return state == "fire" and distance(b_x, enemy.x, b_y, enemy.y) < 32
+
+# collision/player/enemy
+def isCollisionplayer(enemy):
+    return distance(playerX, enemy.x, playerY, enemy.y) < 32
 # ........................................................................
 
 #Health_Bar_Display
@@ -184,6 +188,9 @@ while running:
     for enemy in enemies:
         enemy.move()
         enemy.draw_enemy()
+        if isCollisionplayer(enemy):
+            health -= 10
+            enemies.remove(enemy)
     # ....................................................................
 
     # Player Movement/boundaries   
