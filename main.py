@@ -21,7 +21,7 @@ pygame.init()
 
 # Score display()
 pygame.font.init()
-font = pygame.font.Font(None, 36)
+font = pygame.font.Font(None, 32)
 
 def draw_score():
     score_text = font.render(f"Score: {score}", True, (255, 255, 255))
@@ -99,6 +99,8 @@ class Enemy:
             global score, health
             score -= 1
             health -= HEALTH_DECREASE_CROSS #Reduce health when enemy crosses
+            if health < 0:
+                health = 0
             self.crossed = True
             # print(score)
     
@@ -190,8 +192,14 @@ while running:
         enemy.draw_enemy()
         if isCollisionplayer(enemy):
             health -= 10
+            if health < 0:
+                health = 0
             enemies.remove(enemy)
     # ....................................................................
+
+    #Health restrictions
+    if health > 100:
+        health = 100
 
     # Player Movement/boundaries   
     keys = pygame.key.get_pressed()
@@ -227,6 +235,7 @@ while running:
             state = "ready"
             b_y = -500
             score += 1
+            health += 2
             enemy.x = random.choice([0, W])
             enemy.y = random.choice([-50, 100])
     # .....................................................................
