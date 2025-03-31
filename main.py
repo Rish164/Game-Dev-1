@@ -48,6 +48,11 @@ def player(x, y):
     screen.blit(playerImg, (x, y))
 # ........................................................................
 
+#Health_Bar
+health = 100
+HEALTH_DECREASE_CROSS = 5
+#..............................................................................
+
 # End_line/Asteroid Belt
 rockImg = pygame.image.load('images/stone.png')
 rWidth, rHeight = 24, 24
@@ -91,8 +96,9 @@ class Enemy:
             self.x_vector = -self.x_vector  # Reversing Horizontal direction for boundaries
     
         if self.y >= beltY and not self.crossed:
-            global score
+            global score, health
             score -= 1
+            health -= HEALTH_DECREASE_CROSS #Reduce health when enemy crosses
             self.crossed = True
             # print(score)
     
@@ -120,6 +126,25 @@ spawn_interval = 1000
 def isCollisionbullet(enemy):
     return state == "fire" and distance(b_x, enemy.x, b_y, enemy.y) < 32
 # ........................................................................
+
+#Health_Bar_Display
+def draw_health():
+    health_bar_x = W-110
+    health_bar_y = 25
+    bar_width = 100
+    bar_height = 15
+
+    #Draw bar background
+    pygame.draw.rect(screen, (255, 0, 0), (health_bar_x, health_bar_y, bar_width, bar_height))
+
+    #Draw health fill bar
+    fill_width = (health / 100) * bar_width
+    pygame.draw.rect(screen, (0, 255, 0), (health_bar_x, health_bar_y, fill_width, bar_height))
+
+    #Display health percentage
+    health_text = font.render(f"{health}%", True, (255, 255, 255))
+    screen.blit(health_text, (health_bar_x - 70, health_bar_y - 5))
+#.........................................................................
 
 # Now we will start the Event/Game loop
 running = True
@@ -202,6 +227,7 @@ while running:
     # changes/updates/frames       
     player(playerX, playerY)
     draw_score()
+    draw_health()
     pygame.display.update()
 
 pygame.quit()
