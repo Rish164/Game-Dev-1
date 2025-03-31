@@ -40,7 +40,9 @@ pygame.display.set_icon(pygame.image.load('images/gameicon.png'))
 playerImg = pygame.image.load('images/spaceship.png')
 playerX = W/2 - 32
 playerY = 4*H/5
-p_vector = 1
+normal_speed = 1
+reduced_speed = 0.5  # Slower speed when firing
+p_vector = normal_speed
 
 def player(x, y):
     screen.blit(playerImg, (x, y))
@@ -138,6 +140,9 @@ while running:
             if event.key == pygame.K_SPACE:
                 space_held = False  # Reset flag when spacebar is released
     # ....................................................................
+    
+    # Adjust player speed based on firing state
+    p_vector = reduced_speed if space_held else normal_speed
     
     # Asteroid belt
     draw_belt()
