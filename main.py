@@ -15,6 +15,15 @@ enemy_img = [
 ]
 
 score = 0
+sonic_boom = 0
+max_sonic_ammo = 5
+kill_counter = 0
+sonic_boom_available = False
+sonic_boom_acitve = False
+sonic_boom_timer = 0
+sonic_boom_radius = 0
+health_regen_rate = 10
+movement_blocked = False
 
 pygame.init()
 # ......................................................................
