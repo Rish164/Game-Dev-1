@@ -92,20 +92,18 @@ class Enemy:
     def move(self):
         self.x += self.x_vector
         self.y += self.y_vector
-
-        # Zig-zag effect using sine wave
-        self.x += math.sin(self.y * 0.06) * 3  
-
+        
         if self.x <= 0 or self.x >= W-64:
-            self.x_vector = -self.x_vector  
-
+            self.x_vector = -self.x_vector  # Reversing Horizontal direction for boundaries
+    
         if self.y >= beltY and not self.crossed:
             global score, health
             score -= 1
-            health -= HEALTH_DECREASE_CROSS
+            health -= HEALTH_DECREASE_CROSS #Reduce health when enemy crosses
             if health < 0:
                 health = 0
             self.crossed = True
+            # print(score)
     
     def draw_enemy(self):
         screen.blit(self.image, (self.x, self.y))
@@ -116,15 +114,15 @@ def spawn_enemy():
     image = random.choice(enemy_img)
     x = random.choice([0, W-64])
     y = random.choice([-50, 50])
-    x_vector = random.choice([-0.3, 0.3])
-    y_vector = random.choice([0.1, 0.3])
+    x_vector = random.choice([-0.6, 0.6])
+    y_vector = random.choice([0.1, 0.5])
 
     enemy = Enemy(image, x, y, x_vector, y_vector)
     enemies.append(enemy)
 #
 # Spawn Time
 last_spawn_time = pygame.time.get_ticks()
-spawn_interval = 5000
+spawn_interval = 1000
 # ........................................................................
 
 # collision/bullet/enemy
