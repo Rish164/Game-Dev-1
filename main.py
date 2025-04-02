@@ -161,12 +161,19 @@ def draw_health():
 
 #Sonic_Ammo funcs
 def draw_sonic_ammo():
-    ammo_x = 10
-    ammo_y = 50
-    bar_width = 30
-    bar_height = 10
+    text_x = 10
+    text_y = 50  # Adjusted to leave space below the score
+    ammo_x = text_x + 150  # Position bars after text
+    ammo_y = text_y   # Align bars properly with text
+    bar_width = 10
+    bar_height = 25
     spacing = 5
 
+    # Draw the text label
+    text = font.render("Sonic Ammo:", True, (255, 255, 255))
+    screen.blit(text, (text_x, text_y))
+
+    # Draw the ammo bars in front of the text
     for i in range(sonic_ammo):
         pygame.draw.rect(screen, (255, 255, 255), (ammo_x + i * (bar_width + spacing), ammo_y, bar_width, bar_height))
 
@@ -269,7 +276,7 @@ while running:
 
     # changes/updates/frames       
     player(playerX, playerY)
-    
+
     draw_score()
     draw_health()
     draw_sonic_ammo()
