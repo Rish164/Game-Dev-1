@@ -26,10 +26,9 @@ kill_count = 0
 sonic_boom_active = False
 sonic_boom_start_time = 0
 SONIC_BOOM_COOLDOWN = 1000 #45 seconds in milliseconds
-SONIC_BOOM_SPEED = 1
 
 sonic_boom_radius = 0 #initialize radius of the ring
-SONIC_BOOM_EXPANSION_SPEED = 2 #Pixels per frame
+SONIC_BOOM_EXPANSION_SPEED = 1 #Pixels per frame
 
 pygame.init()
 # ......................................................................
@@ -301,7 +300,7 @@ while running:
 
     if sonic_boom_active:
         sonic_boom_radius += SONIC_BOOM_EXPANSION_SPEED  # Increase the ring size
-        pygame.draw.circle(screen, (255, 255, 255), (int(playerX + 32), int(playerY + 32)), sonic_boom_radius, 2)
+        pygame.draw.circle(screen, (255, 255, 255), (int(playerX + 32), int(playerY + 32)), sonic_boom_radius, 5)
 
     # Stop Sonic Boom when it fully expands
     if sonic_boom_radius >= H:
