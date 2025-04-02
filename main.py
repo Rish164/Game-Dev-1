@@ -192,6 +192,10 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 space_held = True  # Set flag when spacebar is pressed
+            if event.key == pygame.K_LSHIFT or event.key == pygame.K_RSHIFT and sonic_ammo > 0:
+                sonic_ammo -= 1  # Consume 1 Sonic Ammo
+                sonic_boom_active = True  # Activate Sonic Boom
+                sonic_boom_start_time = pygame.time.get_ticks()  # Store activation time
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_SPACE:
                 space_held = False  # Reset flag when spacebar is released
