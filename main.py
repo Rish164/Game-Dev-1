@@ -159,6 +159,17 @@ def draw_health():
     screen.blit(health_text, (health_bar_x - 70, health_bar_y - 5))
 #.........................................................................
 
+#Sonic_Ammo funcs
+def draw_sonic_ammo():
+    ammo_x = 10
+    ammo_y = 50
+    bar_width = 30
+    bar_height = 10
+    spacing = 5
+
+    for i in range(sonic_ammo):
+        pygame.draw.rect(screen, (255, 255, 255), (ammo_x + i * (bar_width + spacing), ammo_y, bar_width, bar_height))
+
 # Now we will start the Event/Game loop
 running = True
 space_held = False  # New flag to track spacebar holding
@@ -243,14 +254,26 @@ while running:
             b_y = -500
             score += 1
             health += 2
+            
+            kill_count += 1 #increment kill counter
+
+            #Check if Sonic Ammo should be increased
+            if kill_count >= KILL_REQUIREMENT:
+                kill_count -= KILL_REQUIREMENT  # Reset counter by decrementing 15 kills for one bar
+                if sonic_ammo < MAX_SONIC_AMMO:
+                    sonic_ammo += 1  # Add 1 Sonic Ammo
+
             enemy.x = random.choice([0, W])
             enemy.y = random.choice([-50, 100])
     # .....................................................................
 
     # changes/updates/frames       
     player(playerX, playerY)
+    
     draw_score()
     draw_health()
+    draw_sonic_ammo()
+
     pygame.display.update()
 
 pygame.quit()
