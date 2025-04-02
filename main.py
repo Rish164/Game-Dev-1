@@ -16,6 +16,12 @@ enemy_img = [
 
 score = 0
 
+#Sonic Variables
+sonic_ammo = 0
+MAX_SONIC_AMMO = 5
+KILL_REQUIREMENT = 15
+kill_count = 0
+
 pygame.init()
 # ......................................................................
 
