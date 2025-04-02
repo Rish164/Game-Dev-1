@@ -22,6 +22,15 @@ MAX_SONIC_AMMO = 5
 KILL_REQUIREMENT = 15
 kill_count = 0
 
+#Activation Variables for Sonic Boom
+sonic_boom_active = False
+sonic_boom_start_time = 0
+SONIC_BOOM_COOLDOWN = 1000 #45 seconds in milliseconds
+SONIC_BOOM_SPEED = 1
+
+sonic_boom_radius = 0 #initialize radius of the ring
+SONIC_BOOM_EXPANSION_SPEED = 2 #Pixels per frame
+
 pygame.init()
 # ......................................................................
 
@@ -192,10 +201,14 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 space_held = True  # Set flag when spacebar is pressed
-            if event.key == pygame.K_LSHIFT or event.key == pygame.K_RSHIFT and sonic_ammo > 0:
-                sonic_ammo -= 1  # Consume 1 Sonic Ammo
-                sonic_boom_active = True  # Activate Sonic Boom
-                sonic_boom_start_time = pygame.time.get_ticks()  # Store activation time
+            if event.key == pygame.K_LSHIFT or event.key == pygame.K_RSHIFT:
+                current_time = pygame.time.get_ticks()
+                if sonic_ammo > 0 and not sonic_boom_active and current_time - sonic_boom_start_time >= SONIC_BOOM_COOLDOWN:
+                    sonic_ammo -= 1  # Consume 1 Sonic Ammo
+                    sonic_boom_active = True  # Activate Sonic Boom
+                    sonic_boom_start_time = current_time  # Store activation time
+                    sonic_boom_radius = 0  # Reset ring size when activated
+
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_SPACE:
                 space_held = False  # Reset flag when spacebar is released
@@ -231,9 +244,10 @@ while running:
         health = 100
 
     # Player Movement/boundaries   
-    keys = pygame.key.get_pressed()
-    playerX += (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * p_vector
-    playerY += (keys[pygame.K_DOWN] - keys[pygame.K_UP]) * p_vector
+    if not sonic_boom_active:
+        keys = pygame.key.get_pressed()
+        playerX += (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * p_vector
+        playerY += (keys[pygame.K_DOWN] - keys[pygame.K_UP]) * p_vector
     #
     # boundaries
     if playerX <= -24:
@@ -251,7 +265,7 @@ while running:
     if b_y <= 0:
         state = "ready"
         b_y = -500
-    if space_held and state == "ready":  # Allow continuous fire when spacebar is held
+    if space_held and state == "ready" and not sonic_boom_active:  # Allow continuous fire when spacebar is held
         state = "fire"
         b_x = playerX
         b_y = playerY
@@ -284,6 +298,16 @@ while running:
     draw_score()
     draw_health()
     draw_sonic_ammo()
+
+    if sonic_boom_active:
+        sonic_boom_radius += SONIC_BOOM_EXPANSION_SPEED  # Increase the ring size
+        pygame.draw.circle(screen, (255, 255, 255), (int(playerX + 32), int(playerY + 32)), sonic_boom_radius, 2)
+
+    # Stop Sonic Boom when it fully expands
+    if sonic_boom_radius >= H:
+        sonic_boom_active = False
+
+
 
     pygame.display.update()
 
