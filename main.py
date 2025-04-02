@@ -17,7 +17,7 @@ enemy_img = [
 score = 0
 
 #Sonic Variables
-sonic_ammo = 0
+sonic_ammo = 1
 MAX_SONIC_AMMO = 5
 KILL_REQUIREMENT = 15
 kill_count = 0
@@ -247,6 +247,10 @@ while running:
         keys = pygame.key.get_pressed()
         playerX += (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * p_vector
         playerY += (keys[pygame.K_DOWN] - keys[pygame.K_UP]) * p_vector
+    else:
+        space_held = False #Prevent firing during Sonic Boom
+        state = "ready" #Reset bullet state during Sonic Boom
+    
     #
     # boundaries
     if playerX <= -24:
@@ -301,6 +305,13 @@ while running:
     if sonic_boom_active:
         sonic_boom_radius += SONIC_BOOM_EXPANSION_SPEED  # Increase the ring size
         pygame.draw.circle(screen, (255, 255, 255), (int(playerX + 32), int(playerY + 32)), sonic_boom_radius, 5)
+
+        #Check if enemies are inside the sonic boom radius
+        for enemy in enemies[:]: #Iterating over a copy of the list
+            if distance(enemy.x, playerX, enemy.y, playerY) <= sonic_boom_radius:
+                score += 1 #Increase score for each enemy 
+                health += 2 #Increase HP for each enemy killed
+                enemies.remove(enemy) #Remove enemy
 
     # Stop Sonic Boom when it fully expands
     if sonic_boom_radius >= H:
