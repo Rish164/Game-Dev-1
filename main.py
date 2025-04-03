@@ -224,7 +224,7 @@ while running:
 
     # Enemy Spawn and movement
     current_time = pygame.time.get_ticks()
-    if current_time - last_spawn_time >= spawn_interval:
+    if not sonic_boom_active and current_time - last_spawn_time >= spawn_interval:
         spawn_enemy()
         last_spawn_time = current_time
     #
@@ -243,7 +243,7 @@ while running:
         health = 100
 
     # Player Movement/boundaries   
-    if not sonic_boom_active:
+    if not sonic_boom_active or sonic_boom_radius >= H:
         keys = pygame.key.get_pressed()
         playerX += (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * p_vector
         playerY += (keys[pygame.K_DOWN] - keys[pygame.K_UP]) * p_vector
