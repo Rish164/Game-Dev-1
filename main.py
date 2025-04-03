@@ -25,7 +25,7 @@ kill_count = 0
 #Activation Variables for Sonic Boom
 sonic_boom_active = False
 sonic_boom_start_time = 0
-SONIC_BOOM_COOLDOWN = 1000 #45 seconds in milliseconds
+SONIC_BOOM_COOLDOWN = 30000 #30 seconds in milliseconds
 
 sonic_boom_radius = 0 #initialize radius of the ring
 SONIC_BOOM_EXPANSION_SPEED = 1 #Pixels per frame
@@ -224,7 +224,7 @@ while running:
 
     # Enemy Spawn and movement
     current_time = pygame.time.get_ticks()
-    if not sonic_boom_active and current_time - last_spawn_time >= spawn_interval:
+    if not sonic_boom_active and    current_time - last_spawn_time >= spawn_interval:
         spawn_enemy()
         last_spawn_time = current_time
     #
@@ -268,13 +268,18 @@ while running:
     if b_y <= 0:
         state = "ready"
         b_y = -500
-    if space_held and state == "ready" and not sonic_boom_active:  # Allow continuous fire when spacebar is held
-        state = "fire"
-        b_x = playerX
-        b_y = playerY
-    if state == "fire":
-        fire(b_x, b_y)
-        b_y -= b_speed
+    if not sonic_boom_active: #Prevent firing during Sonic_Boom    
+        if space_held and state == "ready":
+            state = "fire"
+            b_x = playerX
+            b_y = playerY
+        if state == "fire":
+            fire(b_x, b_y)
+            b_y -= b_speed
+    else:
+        state = "ready" #Ensure no bullets are active
+        b_y = -500
+
     # Kill
     for enemy in enemies:
         if isCollisionbullet(enemy):
