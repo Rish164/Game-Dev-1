@@ -17,15 +17,15 @@ enemy_img = [
 score = 0
 
 #Sonic Variables
-sonic_ammo = 1
-MAX_SONIC_AMMO = 5
+sonic_ammo = 0
+MAX_SONIC_AMMO = 1
 KILL_REQUIREMENT = 15
 kill_count = 0
 
 #Activation Variables for Sonic Boom
 sonic_boom_active = False
 sonic_boom_start_time = 0
-SONIC_BOOM_COOLDOWN = 30000 #30 seconds in milliseconds
+SONIC_BOOM_COOLDOWN = 31200 #32 seconds in milliseconds, as there is a 2 second delay of time while displaying
 
 sonic_boom_radius = 0 #initialize radius of the ring
 SONIC_BOOM_EXPANSION_SPEED = 1 #Pixels per frame
@@ -185,6 +185,15 @@ def draw_sonic_ammo():
     for i in range(sonic_ammo):
         pygame.draw.rect(screen, (255, 255, 255), (ammo_x + i * (bar_width + spacing), ammo_y, bar_width, bar_height))
 
+def draw_sonic_boom_cooldown():
+    if not sonic_boom_active and pygame.time.get_ticks() - sonic_boom_start_time < SONIC_BOOM_COOLDOWN:
+        remaining_time = (SONIC_BOOM_COOLDOWN - (pygame.time.get_ticks() - sonic_boom_start_time)) // 1000
+        cooldown_text = font.render(f"Sonic Lock: {remaining_time}s", True, (255, 255, 255))
+        screen.blit(cooldown_text, (10, 90)) #Position below Sonic Ammo
+#.......................................................................
+
+
+
 # Now we will start the Event/Game loop
 running = True
 space_held = False  # New flag to track spacebar holding
@@ -306,6 +315,7 @@ while running:
     draw_score()
     draw_health()
     draw_sonic_ammo()
+    draw_sonic_boom_cooldown()
 
     if sonic_boom_active:
         sonic_boom_radius += SONIC_BOOM_EXPANSION_SPEED  # Increase the ring size
