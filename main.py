@@ -55,7 +55,7 @@ playerImg = pygame.image.load('images/spaceship.png')
 playerX = W/2 - 32
 playerY = 4*H/5
 normal_speed = 1
-reduced_speed = 0.5  # Slower speed when firing
+#reduced_speed = 0.5  # Slower speed when firing
 p_vector = normal_speed
 
 def player(x, y):
@@ -223,7 +223,7 @@ while running:
     # ....................................................................
     
     # Adjust player speed based on firing state
-    p_vector = reduced_speed if space_held else normal_speed
+    #p_vector = reduced_speed if space_held else normal_speed
     
     # Asteroid belt
     draw_belt()
